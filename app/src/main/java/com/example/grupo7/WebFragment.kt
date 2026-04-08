@@ -12,6 +12,6 @@ class WebFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Infla el layout para este fragmento
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        return inflater.inflate(R.layout.fragment_web, container, false)
     }
 }

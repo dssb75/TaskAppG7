@@ -1,14 +1,43 @@
 <!-- res/layout/fragment_menu.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal">
+    android:padding="16dp">
 
     <!-- Cada botón representa una opción del menú -->
-    <Button android:id="@+id/btn_profile" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Perfil" />
-    <Button android:id="@+id/btn_photos" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Fotos" />
-    <Button android:id="@+id/btn_video" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Video" />
-    <Button android:id="@+id/btn_web" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Web" />
+
+    <Button
+        android:id="@+id/btn_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="Perfil"
+        app:iconPadding="0dp" />
+
+    <Button
+        android:id="@+id/btn_photos"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="Fotos" />
+
+    <Button
+        android:id="@+id/btn_video"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="Video" />
+
+    <Button
+        android:id="@+id/btn_web"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="Web" />
+
+    <Button
+        android:id="@+id/btn_button"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="Botones" />
+
 </LinearLayout>

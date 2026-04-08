@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-class VideoFragment : Fragment() {
+// Este fragmento representa la sección de perfil.
+class ButtonFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Infla el layout para este fragmento
-        return inflater.inflate(R.layout.fragment_video, container, false)
+        return inflater.inflate(R.layout.fragment_button, container, false)
     }
 }
