@@ -1,72 +1,19 @@
 package com.example.grupo7
 
-import android.graphics.Paint
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.CheckBox
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
-
-data class Task(val id: Int, val name: String, var completed: Boolean = false)
-
-class TaskAdapter(
-    private var tasks: List<Task>,
-    private val onCheck: (Task) -> Unit,
-    private val onDelete: (Task) -> Unit
-) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
-
-    inner class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val cb  = view.findViewById<CheckBox>(R.id.cb_task)
-        val tv  = view.findViewById<TextView>(R.id.tv_task_name)
-        val btn = view.findViewById<MaterialButton>(R.id.btn_delete)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
-        return TaskViewHolder(v)
-    }
-
-    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val task = tasks[position]
-        holder.tv.text = task.name
-        holder.cb.isChecked = task.completed
-
-        if (task.completed) {
-            holder.tv.paintFlags = holder.tv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-            holder.tv.alpha = 0.5f
-        } else {
-            holder.tv.paintFlags = holder.tv.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-            holder.tv.alpha = 1.0f
-        }
-
-        holder.cb.setOnClickListener { onCheck(task) }
-        holder.btn.setOnClickListener { onDelete(task) }
-    }
-
-    override fun getItemCount() = tasks.size
-
-    fun updateList(newList: List<Task>) {
-        tasks = newList
-        notifyDataSetChanged()
-    }
-}
+import java.util.Calendar
 
 class ButtonFragment : Fragment() {
-
-    private val allTasks = mutableListOf<Task>()
-    private var nextId = 1
-    private var currentFilter = 0
-    private lateinit var adapter: TaskAdapter
-    private lateinit var tvCount: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,72 +25,95 @@ class ButtonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tvCount = view.findViewById(R.id.tv_task_count)
-        val etTask   = view.findViewById<TextInputEditText>(R.id.et_task)
-        val btnAdd   = view.findViewById<MaterialButton>(R.id.btn_add)
-        val rv       = view.findViewById<RecyclerView>(R.id.rv_tasks)
-        val tabs     = view.findViewById<TabLayout>(R.id.tab_filter)
-        val btnClear = view.findViewById<MaterialButton>(R.id.btn_clear_completed)
+        val etTitle   = view.findViewById<TextInputEditText>(R.id.et_title)
+        val etNotes   = view.findViewById<TextInputEditText>(R.id.et_notes)
+        val etDate    = view.findViewById<TextInputEditText>(R.id.et_date)
+        val etTime    = view.findViewById<TextInputEditText>(R.id.et_time)
+        val chipGroup = view.findViewById<ChipGroup>(R.id.chip_group_priority)
 
-        adapter = TaskAdapter(emptyList(),
-            onCheck  = { task -> toggleTask(task) },
-            onDelete = { task -> deleteTask(task) }
-        )
-        rv.layoutManager = LinearLayoutManager(context)
-        rv.adapter = adapter
-
-        btnAdd.setOnClickListener { addTask(etTask) }
-
-        etTask.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) { addTask(etTask); true } else false
+        // Botón Guardar (arriba)
+        view.findViewById<MaterialButton>(R.id.btn_save).setOnClickListener {
+            guardarTarea(etTitle, etNotes, etDate, etTime, chipGroup)
         }
 
-        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) { currentFilter = tab.position; refreshList() }
-            override fun onTabUnselected(tab: TabLayout.Tab) {}
-            override fun onTabReselected(tab: TabLayout.Tab) {}
-        })
-
-        btnClear.setOnClickListener {
-            val removed = allTasks.count { it.completed }
-            allTasks.removeAll { it.completed }
-            refreshList()
-            Toast.makeText(context, "$removed tarea(s) eliminada(s)", Toast.LENGTH_SHORT).show()
+        // Grabar voz
+        view.findViewById<MaterialButton>(R.id.btn_voice).setOnClickListener {
+            Toast.makeText(context, "Grabando nota de voz...", Toast.LENGTH_SHORT).show()
         }
 
-        refreshList()
+        // Adjuntar imagen
+        view.findViewById<MaterialButton>(R.id.btn_image).setOnClickListener {
+            Toast.makeText(context, "Seleccionar imagen...", Toast.LENGTH_SHORT).show()
+        }
+
+        // Grabar video
+        view.findViewById<MaterialButton>(R.id.btn_video).setOnClickListener {
+            Toast.makeText(context, "Grabando video...", Toast.LENGTH_SHORT).show()
+        }
+
+        // Selector de fecha
+        etDate.setOnClickListener {
+            val cal = Calendar.getInstance()
+            DatePickerDialog(
+                requireContext(),
+                { _, year, month, day ->
+                    etDate.setText("%02d/%02d/%04d".format(day, month + 1, year))
+                },
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+
+        // Selector de hora
+        etTime.setOnClickListener {
+            val cal = Calendar.getInstance()
+            TimePickerDialog(
+                requireContext(),
+                { _, hour, minute ->
+                    etTime.setText("%02d:%02d".format(hour, minute))
+                },
+                cal.get(Calendar.HOUR_OF_DAY),
+                cal.get(Calendar.MINUTE),
+                true
+            ).show()
+        }
+
+        // Botón Create Task (abajo)
+        view.findViewById<MaterialButton>(R.id.btn_create_task).setOnClickListener {
+            guardarTarea(etTitle, etNotes, etDate, etTime, chipGroup)
+        }
     }
 
-    private fun addTask(et: TextInputEditText) {
-        val text = et.text.toString().trim()
-        if (text.isEmpty()) {
-            Toast.makeText(context, "Escribe una tarea primero", Toast.LENGTH_SHORT).show()
+    private fun guardarTarea(
+        etTitle: TextInputEditText,
+        etNotes: TextInputEditText,
+        etDate: TextInputEditText,
+        etTime: TextInputEditText,
+        chipGroup: ChipGroup
+    ) {
+        val title = etTitle.text.toString().trim()
+
+        if (title.isEmpty()) {
+            etTitle.error = "El título es obligatorio"
             return
         }
-        allTasks.add(Task(nextId++, text))
-        et.text?.clear()
-        refreshList()
-    }
 
-    private fun toggleTask(task: Task) {
-        val index = allTasks.indexOfFirst { it.id == task.id }
-        if (index != -1) { allTasks[index].completed = !allTasks[index].completed; refreshList() }
-    }
-
-    private fun deleteTask(task: Task) {
-        allTasks.removeAll { it.id == task.id }
-        refreshList()
-        Toast.makeText(context, "Tarea eliminada", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun refreshList() {
-        val filtered = when (currentFilter) {
-            1    -> allTasks.filter { !it.completed }
-            2    -> allTasks.filter { it.completed }
-            else -> allTasks.toList()
+        val prioridad = when (chipGroup.checkedChipId) {
+            R.id.chip_low  -> "Baja"
+            R.id.chip_high -> "Alta"
+            else           -> "Media"
         }
-        adapter.updateList(filtered)
-        val pending = allTasks.count { !it.completed }
-        tvCount.text = "$pending tarea(s) pendiente(s)"
+
+        Toast.makeText(
+            context,
+            "✅ Tarea \"$title\" creada · Prioridad: $prioridad",
+            Toast.LENGTH_LONG
+        ).show()
+
+        etTitle.text?.clear()
+        etNotes.text?.clear()
+        etDate.text?.clear()
+        etTime.text?.clear()
     }
 }
