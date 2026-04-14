@@ -1,36 +1,50 @@
 package com.example.grupo7
+
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.VideoView
-import android.net.Uri
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.VideoView
+import androidx.fragment.app.Fragment
 
-
+// a. Fragmento utilizado por la aplicación para el módulo de Video
 class VideoFragment : Fragment() {
 
-    var videoV: VideoView? = null
-    val handler = android.os.Handler(android.os.Looper.getMainLooper())
-    var barraTiempo: SeekBar? = null
-    var txtReproducido: TextView? = null
-    var txtTiempoTotal: TextView? = null
+    // d. Definición de variables
+    private var videoV: VideoView? = null
+    private var barraTiempo: SeekBar? = null
+    private var txtReproducido: TextView? = null
+    private var txtTiempoTotal: TextView? = null
+    private val handler = android.os.Handler(android.os.Looper.getMainLooper())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // b. Creación de la interfaz
         val view = inflater.inflate(R.layout.fragment_video, container, false)
 
-        videoV = view.findViewById<VideoView>(R.id.videoView1)
-        barraTiempo = view.findViewById<SeekBar>(R.id.seekBar1)
-        txtReproducido = view.findViewById<TextView>(R.id.txtTiempoReproducido)
-        txtTiempoTotal = view.findViewById<TextView>(R.id.txtTiempoVideoTotal)
+        // d. Vínculo de variables con identificadores
+        videoV = view.findViewById(R.id.videoView1)
+        barraTiempo = view.findViewById(R.id.seekBar1)
+        txtReproducido = view.findViewById(R.id.txtTiempoReproducido)
+        txtTiempoTotal = view.findViewById(R.id.txtTiempoVideoTotal)
 
-        videoV?.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.prueba3))
+        // e. Identificación de eventos y métodos
+        configurarVideo()
+        configurarControles(view)
+
+        return view
+    }
+
+    // e. Declaración de métodos
+    private fun configurarVideo() {
+        val uri = Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.prueba3)
+        videoV?.setVideoURI(uri)
 
         videoV?.setOnPreparedListener { mp ->
             txtTiempoTotal?.text = fomatoTiempo(mp.duration)
@@ -38,18 +52,9 @@ class VideoFragment : Fragment() {
             videoV?.start()
             actualizarBarra()
         }
+    }
 
-        barraTiempo?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    videoV?.seekTo(progress)
-                    txtReproducido?.text = fomatoTiempo(progress)
-                }
-            }
-            override fun onStartTrackingTouch(sb: SeekBar?) {}
-            override fun onStopTrackingTouch(sb: SeekBar?) {}
-        })
-
+    private fun configurarControles(view: View) {
         view.findViewById<Button>(R.id.btnPlay).setOnClickListener {
             videoV?.start()
             actualizarBarra()
@@ -59,11 +64,8 @@ class VideoFragment : Fragment() {
             videoV?.stopPlayback()
             videoV?.resume()
         }
-
-        return view
     }
 
-    // Actualiza la SeekBar cada segundo
     private fun actualizarBarra() {
         handler.postDelayed({
             videoV?.let {
@@ -74,12 +76,10 @@ class VideoFragment : Fragment() {
         }, 500)
     }
 
-
     private fun fomatoTiempo(ms: Int): String {
         val segundos = (ms / 1000) % 60
         val minutos = (ms / 1000) / 60
-        val conversionTiempo = String.format("%02d:%02d", minutos, segundos)
-        return conversionTiempo
+        return String.format("%02d:%02d", minutos, segundos)
     }
 
     override fun onDestroyView() {
