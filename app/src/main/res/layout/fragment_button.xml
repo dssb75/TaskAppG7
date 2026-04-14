@@ -108,7 +108,7 @@
         android:id="@+id/btn_clear_completed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:margin="16dp"
+        android:layout_margin="16dp"
         android:text="Limpiar Completadas"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:cornerRadius="8dp" />
