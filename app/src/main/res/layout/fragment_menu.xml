@@ -11,33 +11,80 @@
 
     <Button
         android:id="@+id/btn_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:text="Perfil"
-        app:iconPadding="0dp" />
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#FFFFFF"
+        android:drawableTop="@drawable/perfil"
+        android:gravity="center"
+        android:paddingVertical="8dp"
+        android:text="PERFIL"
+        android:textColor="#555555"
+        android:textSize="10sp"
+        app:cornerRadius="10dp" />
 
     <Button
         android:id="@+id/btn_photos"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:text="Fotos" />
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#FFFFFF"
+        android:drawableTop="@drawable/imagen"
+        android:gravity="center"
+        android:paddingVertical="8dp"
+        android:text="FOTOS"
+        android:textColor="#555555"
+        android:textSize="10sp"
+        app:cornerRadius="10dp"/>
 
     <Button
         android:id="@+id/btn_video"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:text="Video" />
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#FFFFFF"
+        android:drawableTop="@drawable/video"
+        android:gravity="center"
+        android:paddingVertical="8dp"
+        android:text="VIDEOS"
+        android:textColor="#555555"
+        android:textSize="10sp"
+        app:cornerRadius="10dp"/>
 
     <Button
         android:id="@+id/btn_web"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:text="Web" />
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#FFFFFF"
+        android:drawableTop="@drawable/web"
+        android:gravity="center"
+        android:paddingVertical="8dp"
+        android:text="WEB"
+        android:textColor="#555555"
+        android:textSize="10sp"
+        app:cornerRadius="10dp" />
 
     <Button
         android:id="@+id/btn_button"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:text="Botones" />
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#FFFFFF"
+        android:drawableTop="@drawable/crear"
+        android:gravity="center"
+        android:paddingVertical="8dp"
+        android:text="CREAR"
+        android:textColor="#555555"
+        android:textSize="10sp"
+        app:cornerRadius="10dp"/>
 
 </LinearLayout>
