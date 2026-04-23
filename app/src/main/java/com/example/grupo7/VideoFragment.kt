@@ -11,46 +11,39 @@ import android.widget.TextView
 import android.widget.VideoView
 import androidx.fragment.app.Fragment
 
-// a. Fragmento utilizado por la aplicación para el módulo de Video
 class VideoFragment : Fragment() {
 
-    // d. Definición de variables
+    //DECLARACION DE VARIABLES
     private var videoV: VideoView? = null
     private var barraTiempo: SeekBar? = null
     private var txtReproducido: TextView? = null
     private var txtTiempoTotal: TextView? = null
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())
 
+    //METODOS PRIMARIO
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // b. Creación de la interfaz
+
         val view = inflater.inflate(R.layout.fragment_video, container, false)
 
-        // d. Vínculo de variables con identificadores
         videoV = view.findViewById(R.id.videoView1)
         barraTiempo = view.findViewById(R.id.seekBar1)
         txtReproducido = view.findViewById(R.id.txtTiempoReproducido)
         txtTiempoTotal = view.findViewById(R.id.txtTiempoVideoTotal)
-
-        // e. Identificación de eventos y métodos
         configurarVideo()
         configurarControles(view)
-
         return view
     }
 
-    // e. Declaración de métodos
+    //METODOS SECUNDARIOS
     private fun configurarVideo() {
         val uri = Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.prueba3)
         videoV?.setVideoURI(uri)
-
         videoV?.setOnPreparedListener { mp ->
             txtTiempoTotal?.text = fomatoTiempo(mp.duration)
             barraTiempo?.max = mp.duration
-            videoV?.start()
-            actualizarBarra()
         }
     }
 

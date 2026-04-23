@@ -1,5 +1,6 @@
 <!-- res/layout/fragment_profile.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,68 +8,106 @@
     android:gravity="start"
     android:orientation="vertical">
 
-    <VideoView
-        android:id="@+id/videoView1"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginTop="50dp" />
-    <SeekBar
-        android:id="@+id/seekBar1"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginTop="20dp"
+        android:text="Videos adjuntos"
+        android:textAlignment="center"
+        android:textColor="#555555"
+        android:textSize="22sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="25dp"
+        android:background="#FFFFFF"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp">
 
-        <TextView
-            android:id="@+id/txtTiempoReproducido"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="00:00" />
+            android:orientation="vertical"
+            android:padding="8dp">
 
-        <TextView
-            android:id="@+id/txtTiempoVideoTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:00" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp">
+                <VideoView
+                    android:id="@+id/videoView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
+            <SeekBar
+                android:id="@+id/seekBar1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:progressBackgroundTint="#555555"
+                android:progressTint="#6200EE"
+                android:thumbTint="#6200EE" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="32dp">
 
-        <Button
-            android:id="@+id/btnPlay"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:text="▶" />
+                <TextView
+                    android:id="@+id/txtTiempoReproducido"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="00:00" />
 
-        <Button
-            android:id="@+id/btnPause"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="⏸" />
+                <TextView
+                    android:id="@+id/txtTiempoVideoTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/btnStop"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="⏹" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/btnPlay"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:drawableTop="@drawable/play"
+                    android:insetTop="0dp"
+                    android:padding="12dp"
+                    app:cornerRadius="100dp" />
 
+                <Button
+                    android:id="@+id/btnPause"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:drawableTop="@drawable/pause"
+                    android:insetTop="0dp"
+                    android:padding="12dp"
+                    app:cornerRadius="100dp" />
 
+                <Button
+                    android:id="@+id/btnStop"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:drawableTop="@drawable/stop"
+                    android:insetTop="0dp"
+                    android:padding="12dp"
+                    app:cornerRadius="100dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>
