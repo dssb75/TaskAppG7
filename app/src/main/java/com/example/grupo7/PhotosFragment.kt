@@ -5,13 +5,52 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 
 class PhotosFragment : Fragment() {
+
+    private var imgBloque1: ImageView? = null
+    private var imgBloque2: ImageView? = null
+    private var imgBloque3: ImageView? = null
+    private var txtDescripcionSeleccionada: TextView? = null
+    private var txtTituloSeleccionado: TextView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_photos, container, false)
+        val view = inflater.inflate(R.layout.fragment_photos, container, false)
+
+        imgBloque1 = view.findViewById(R.id.imgBloque1)
+        imgBloque2 = view.findViewById(R.id.imgBloque2)
+        imgBloque3 = view.findViewById(R.id.imgBloque3)
+        txtTituloSeleccionado = view.findViewById(R.id.txtTituloSeleccionado)
+        txtDescripcionSeleccionada = view.findViewById(R.id.txtDescripcionSeleccionada)
+
+        // Descripción inicial
+        txtTituloSeleccionado?.text = "Editar Video"
+        txtDescripcionSeleccionada?.text =
+            "Tarea Pendiente\\nDía 29 de abril a las 10:00 a.m.\\nSupervise y actualice los lineamientos visuales para asegurar la coherencia de marca en la nueva campaña estacional.\\n\\nTener presente editar el video para su entrega."
+
+        imgBloque1?.setOnClickListener {
+            txtTituloSeleccionado?.text = "Editar Video"
+            txtDescripcionSeleccionada?.text =
+                "Tarea Pendiente\\nDía 29 de abril a las 10:00 a.m.\\nSupervise y actualice los lineamientos visuales para asegurar la coherencia de marca en la nueva campaña estacional.\\n\\nTener presente editar el video para su entrega."
+        }
+
+        imgBloque2?.setOnClickListener {
+            txtTituloSeleccionado?.text = "Reunión con Equipo"
+            txtDescripcionSeleccionada?.text =
+                "Tarea Pendiente\\nDía 26 de abril a las 4:00 p.m.\\nGestione la refactorización técnica de la plataforma principal para mejorar la experiencia del usuario y tiempos de carga.\\n\\nManejar objetivo en reunión e indicaciones."
+        }
+
+        imgBloque3?.setOnClickListener {
+            txtTituloSeleccionado?.text = "Seguimiento de Actividades"
+            txtDescripcionSeleccionada?.text =
+                "Tarea Pendiente\\nDía 30 de abril a las 9:00 a.m.\\nRevisar tareas pendientes, validar avances del proyecto y actualizar compromisos del equipo."
+        }
+
+        return view
     }
 }

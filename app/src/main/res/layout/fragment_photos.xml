@@ -10,83 +10,99 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Bloque 1 -->
+        <!-- Tarjeta principal de galería -->
         <LinearLayout
-            android:id="@+id/bloqueFoto1"
+            android:id="@+id/tarjetaGaleriaFotos"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="503dp"
             android:layout_marginTop="24dp"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:background="#FFFFFF"
-            android:elevation="4dp">
-
-            <ImageView
-                android:id="@+id/imgBloque1"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bloque1"
-                android:contentDescription="Imagen bloque 1" />
-
-            <TextView
-                android:id="@+id/txtTituloBloque1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Editar Video"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#111827" />
-
-            <TextView
-                android:id="@+id/txtDescripcionBloque1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Editar video para presentación pendiente con equipo reunión 18/04/2026"
-                android:textSize="14sp"
-                android:textColor="#6B7280" />
-        </LinearLayout>
-
-        <!-- Bloque 2 -->
-        <LinearLayout
-            android:id="@+id/bloqueFoto2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:orientation="vertical"
-            android:padding="12dp"
             android:background="#FFFFFF"
-            android:elevation="4dp">
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <ImageView
-                android:id="@+id/imgBloque2"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bloque2"
-                android:contentDescription="Imagen bloque 2" />
-
+            <!-- Título de la tarjeta -->
             <TextView
-                android:id="@+id/txtTituloBloque2"
+                android:id="@+id/txtTituloGaleria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Reunión con Equipo"
+                android:text="Galería de actividades"
+                android:textColor="#111827"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <!-- Texto guía -->
+            <TextView
+                android:id="@+id/txtSubtituloGaleria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Selecciona una imagen para visualizar su descripción."
+                android:textColor="#6B7280"
+                android:textSize="14sp" />
+
+            <!-- Scroll horizontal de imágenes -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgBloque1"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Imagen 1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/bloque1" />
+
+                    <ImageView
+                        android:id="@+id/imgBloque2"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Imagen 2"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/bloque2" />
+
+                    <ImageView
+                        android:id="@+id/imgBloque3"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:contentDescription="Imagen 3"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/bloque3" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Título de imagen seleccionada -->
+            <TextView
+                android:id="@+id/txtTituloSeleccionado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Editar Video"
+                android:textColor="#111827"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#111827" />
+                android:textStyle="bold" />
 
+            <!-- Descripción dinámica -->
             <TextView
-                android:id="@+id/txtDescripcionBloque2"
+                android:id="@+id/txtDescripcionSeleccionada"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Reunión en sala de juntas, avisar por correo a requeridos y equipo Soporte"
-                android:textSize="14sp"
-                android:textColor="#6B7280" />
+                android:layout_marginTop="8dp"
+                android:text="Tarea Pendiente\nDía 29 de abril a las 10:00 a.m.\nSupervise y actualice los lineamientos visuales para asegurar la coherencia de marca en la nueva campaña estacional.\n\nTener presente editar el video para su entrega."
+                android:textColor="#6B7280"
+                android:textSize="15sp" />
+
         </LinearLayout>
 
     </LinearLayout>
