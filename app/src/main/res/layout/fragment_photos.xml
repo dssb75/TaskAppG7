@@ -99,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Tarea Pendiente\nDía 29 de abril a las 10:00 a.m.\nSupervise y actualice los lineamientos visuales para asegurar la coherencia de marca en la nueva campaña estacional.\n\nTener presente editar el video para su entrega."
+                android:text="Tarea Pendiente - Día 29 de abril a las 10:00 a.m. - Supervise y actualice los lineamientos visuales para asegurar la coherencia de marca en la nueva campaña estacional. - Tener presente editar el video para su entrega."
                 android:textColor="#6B7280"
                 android:textSize="15sp" />
 
