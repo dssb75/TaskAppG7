@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -17,6 +18,8 @@ import androidx.fragment.app.Fragment
     private lateinit var progressBar: ProgressBar
      private lateinit var tvVoiceNotesCount: TextView
     private lateinit var tvProjectsCount: TextView
+
+    private lateinit var ivProfile: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +35,7 @@ import androidx.fragment.app.Fragment
 
         tvVoiceNotesCount = view.findViewById(R.id.tv_voice_notes_count)
         tvProjectsCount = view.findViewById(R.id.tv_projects_count)
+        ivProfile = view.findViewById(R.id.iv_profile_picture)
 
         mostrarInformacion()
 
@@ -42,8 +46,8 @@ import androidx.fragment.app.Fragment
 
         val nombre = "Grupo 7"
 
-
         tvTitle.text = "¡Hola $nombre!"
+        ivProfile.setImageResource(R.drawable.perfil)
         tvTaskNumber.text = "5"
         tvTaskPercent.text = "1%"
         progressBar.progress = 1
