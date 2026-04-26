@@ -40,12 +40,25 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_edit"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="0dp"
+            app:icon="@android:drawable/ic_menu_edit"
+            app:iconSize="18dp"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:cornerRadius="20dp"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            app:iconTint="#6B7280" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_delete"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="0dp"
             app:icon="@android:drawable/ic_menu_delete"
-            app:iconSize="20dp"
+            app:iconSize="18dp"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:cornerRadius="20dp"
