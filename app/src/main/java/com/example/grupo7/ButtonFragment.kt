@@ -21,12 +21,14 @@ import java.util.Calendar
 
 class TareaAdapter(
     private var tareas: MutableList<JSONObject>,
+    private val onEdit:   (Int) -> Unit,
     private val onDelete: (Int) -> Unit
 ) : RecyclerView.Adapter<TareaAdapter.VH>() {
 
     inner class VH(view: View) : RecyclerView.ViewHolder(view) {
         val tvTitle = view.findViewById<TextView>(R.id.tv_task_title)
         val tvMeta  = view.findViewById<TextView>(R.id.tv_task_meta)
+        val btnEdit = view.findViewById<MaterialButton>(R.id.btn_edit)
         val btnDel  = view.findViewById<MaterialButton>(R.id.btn_delete)
     }
 
@@ -47,7 +49,8 @@ class TareaAdapter(
             if (prio.isNotEmpty())  append("🔖 $prio")
         }
         holder.tvMeta.text = meta
-        holder.btnDel.setOnClickListener { onDelete(position) }
+        holder.btnEdit.setOnClickListener { onEdit(position) }
+        holder.btnDel.setOnClickListener  { onDelete(position) }
     }
 
     fun actualizar(nuevas: MutableList<JSONObject>) {
@@ -60,6 +63,14 @@ class ButtonFragment : Fragment() {
 
     private lateinit var adapter: TareaAdapter
     private lateinit var tvCount: TextView
+    private lateinit var etTitle: TextInputEditText
+    private lateinit var etNotes: TextInputEditText
+    private lateinit var etDate:  TextInputEditText
+    private lateinit var etTime:  TextInputEditText
+    private lateinit var chipGroup: ChipGroup
+    private lateinit var btnCreate: MaterialButton
+
+    private var editandoIndex = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,27 +82,33 @@ class ButtonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val etTitle   = view.findViewById<TextInputEditText>(R.id.et_title)
-        val etNotes   = view.findViewById<TextInputEditText>(R.id.et_notes)
-        val etDate    = view.findViewById<TextInputEditText>(R.id.et_date)
-        val etTime    = view.findViewById<TextInputEditText>(R.id.et_time)
-        val chipGroup = view.findViewById<ChipGroup>(R.id.chip_group_priority)
-        val rv        = view.findViewById<RecyclerView>(R.id.rv_tasks)
-        tvCount       = view.findViewById(R.id.tv_task_count)
+        etTitle   = view.findViewById(R.id.et_title)
+        etNotes   = view.findViewById(R.id.et_notes)
+        etDate    = view.findViewById(R.id.et_date)
+        etTime    = view.findViewById(R.id.et_time)
+        chipGroup = view.findViewById(R.id.chip_group_priority)
+        tvCount   = view.findViewById(R.id.tv_task_count)
+        btnCreate = view.findViewById(R.id.btn_create_task)
 
-        adapter = TareaAdapter(cargarTareas()) { pos -> eliminarTarea(pos) }
+        val rv = view.findViewById<RecyclerView>(R.id.rv_tasks)
+        adapter = TareaAdapter(
+            cargarTareas(),
+            onEdit   = { pos -> cargarEnFormulario(pos) },
+            onDelete = { pos -> eliminarTarea(pos) }
+        )
         rv.layoutManager = LinearLayoutManager(context)
         rv.adapter = adapter
         actualizarContador()
 
-        view.findViewById<MaterialButton>(R.id.btn_save).setOnClickListener {
-            guardarTarea(etTitle, etNotes, etDate, etTime, chipGroup)
-        }
-        view.findViewById<MaterialButton>(R.id.btn_create_task).setOnClickListener {
-            guardarTarea(etTitle, etNotes, etDate, etTime, chipGroup)
-        }
+        view.findViewById<MaterialButton>(R.id.btn_save).setOnClickListener { guardarTarea() }
+        btnCreate.setOnClickListener { guardarTarea() }
+
+        // Grabar voz → cuenta real en SharedPreferences
         view.findViewById<MaterialButton>(R.id.btn_voice).setOnClickListener {
-            Toast.makeText(context, "Grabando nota de voz...", Toast.LENGTH_SHORT).show()
+            val prefs  = requireContext().getSharedPreferences("tareas_app", Context.MODE_PRIVATE)
+            val actual = prefs.getInt("notas_voz", 0)
+            prefs.edit().putInt("notas_voz", actual + 1).apply()
+            Toast.makeText(context, "🎙 Nota de voz #${actual + 1} guardada", Toast.LENGTH_SHORT).show()
         }
         view.findViewById<MaterialButton>(R.id.btn_image).setOnClickListener {
             Toast.makeText(context, "Seleccionar imagen...", Toast.LENGTH_SHORT).show()
@@ -114,15 +131,30 @@ class ButtonFragment : Fragment() {
         }
     }
 
-    private fun guardarTarea(
-        etTitle: TextInputEditText,
-        etNotes: TextInputEditText,
-        etDate: TextInputEditText,
-        etTime: TextInputEditText,
-        chipGroup: ChipGroup
-    ) {
+    private fun cargarEnFormulario(pos: Int) {
+        val t = cargarTareas()[pos]
+        editandoIndex = pos
+        etTitle.setText(t.optString("titulo", ""))
+        etNotes.setText(t.optString("notas", ""))
+        etDate.setText(t.optString("fecha", ""))
+        etTime.setText(t.optString("hora", ""))
+        when (t.optString("prioridad", "Media")) {
+            "Baja" -> chipGroup.check(R.id.chip_low)
+            "Alta" -> chipGroup.check(R.id.chip_high)
+            else   -> chipGroup.check(R.id.chip_medium)
+        }
+        btnCreate.text = "Guardar Cambios ✏️"
+        Toast.makeText(context, "Editando tarea — modifica y guarda", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun guardarTarea() {
         val title = etTitle.text.toString().trim()
+        val fecha = etDate.text.toString().trim()
+        val hora  = etTime.text.toString().trim()
+
         if (title.isEmpty()) { etTitle.error = "El título es obligatorio"; return }
+        if (fecha.isEmpty())  { etDate.error  = "La fecha es obligatoria";  return }
+        if (hora.isEmpty())   { etTime.error  = "La hora es obligatoria";   return }
 
         val prioridad = when (chipGroup.checkedChipId) {
             R.id.chip_low  -> "Baja"
@@ -130,25 +162,34 @@ class ButtonFragment : Fragment() {
             else           -> "Media"
         }
 
+        val tarea = JSONObject().apply {
+            put("titulo",    title)
+            put("notas",     etNotes.text.toString().trim())
+            put("fecha",     fecha)
+            put("hora",      hora)
+            put("prioridad", prioridad)
+        }
+
         val prefs     = requireContext().getSharedPreferences("tareas_app", Context.MODE_PRIVATE)
         val jsonArray = JSONArray(prefs.getString("lista_tareas", "[]"))
 
-        val nueva = JSONObject().apply {
-            put("titulo",    title)
-            put("notas",     etNotes.text.toString().trim())
-            put("fecha",     etDate.text.toString().trim())
-            put("hora",      etTime.text.toString().trim())
-            put("prioridad", prioridad)
+        if (editandoIndex >= 0) {
+            jsonArray.put(editandoIndex, tarea)
+            Toast.makeText(context, "✅ Tarea actualizada", Toast.LENGTH_SHORT).show()
+            editandoIndex = -1
+            btnCreate.text = "Create Task  →"
+        } else {
+            jsonArray.put(tarea)
+            Toast.makeText(context, "✅ Tarea \"$title\" guardada", Toast.LENGTH_SHORT).show()
         }
-        jsonArray.put(nueva)
-        prefs.edit().putString("lista_tareas", jsonArray.toString()).apply()
 
-        Toast.makeText(context, "✅ Tarea \"$title\" guardada", Toast.LENGTH_SHORT).show()
+        prefs.edit().putString("lista_tareas", jsonArray.toString()).apply()
 
         etTitle.text?.clear()
         etNotes.text?.clear()
         etDate.text?.clear()
         etTime.text?.clear()
+        chipGroup.check(R.id.chip_medium)
 
         adapter.actualizar(cargarTareas())
         actualizarContador()
@@ -160,6 +201,7 @@ class ButtonFragment : Fragment() {
         val nueva     = JSONArray()
         for (i in 0 until jsonArray.length()) { if (i != pos) nueva.put(jsonArray.get(i)) }
         prefs.edit().putString("lista_tareas", nueva.toString()).apply()
+        if (editandoIndex == pos) { editandoIndex = -1; btnCreate.text = "Create Task  →" }
         adapter.actualizar(cargarTareas())
         actualizarContador()
         Toast.makeText(context, "Tarea eliminada", Toast.LENGTH_SHORT).show()
